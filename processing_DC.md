@@ -231,7 +231,7 @@ for i in range(121):
     yy = mymtx.pmtx.index/1e-6
     xnew.append(xx)
     ynew.append(yy)
-    plt.plot(xx,yy,ls='-',c='grey')
+    plt.plot(xx,yy,ls='-',c='grey',alpha=0.5)
 plt.xlim(-75,1)
 plt.ylim(-2.1,0)
 plt.xlabel('Vmeas (µV)')

@@ -59,7 +59,7 @@ data[0].head()
 
 ```python
 mymtx = stlabutils.framearr_to_mtx(
-    data[len(data)//4:len(data)*3//4], 'Vmeas (V)', xkey='Iset (V)', ykey='RF power (dBm)')
+    data, 'Vmeas (V)', xkey='Iset (V)', ykey='RF power (dBm)')
 mymtx.rotate_ccw()
 mymtx.sub_linecut(data[0].shape[0]//2,1)
 #mymtx.applystep('flip 1,0')
@@ -157,7 +157,7 @@ data[0].head()
 
 ```python
 mymtx = stlabutils.framearr_to_mtx(
-    data[len(data)//4:len(data)*3//4], 'Vmeas (V)', xkey='Iset (V)', ykey='RF power (dBm)')
+    data, 'Vmeas (V)', xkey='Iset (V)', ykey='RF power (dBm)')
 mymtx.rotate_ccw()
 mymtx.sub_linecut(data[0].shape[0]//2,1)
 #mymtx.applystep('flip 1,0')
@@ -259,7 +259,7 @@ data[0].head()
 
 ```python
 mymtx = stlabutils.framearr_to_mtx(
-    data[len(data)//4:len(data)*3//4], 'Vmeas (V)', xkey='Iset (V)', ykey='RF power (dBm)')
+    data, 'Vmeas (V)', xkey='Iset (V)', ykey='RF power (dBm)')
 mymtx.rotate_ccw()
 mymtx.sub_linecut(data[0].shape[0]//2,1)
 #mymtx.applystep('flip 1,0')
@@ -357,7 +357,7 @@ data[0].head()
 
 ```python
 mymtx = stlabutils.framearr_to_mtx(
-    data[len(data)//4:len(data)*3//4], 'Vmeas (V)', xkey='Iset (V)', ykey='RF power (dBm)')
+    data, 'Vmeas (V)', xkey='Iset (V)', ykey='RF power (dBm)')
 mymtx.rotate_ccw()
 mymtx.sub_linecut(data[0].shape[0]//2,1)
 #mymtx.applystep('flip 1,0')
@@ -455,7 +455,7 @@ data[0].head()
 
 ```python
 mymtx = stlabutils.framearr_to_mtx(
-    data[len(data)//4:len(data)*3//4], 'Vmeas (V)', xkey='Iset (V)', ykey='RF power (dBm)')
+    data, 'Vmeas (V)', xkey='Iset (V)', ykey='RF power (dBm)')
 mymtx.rotate_ccw()
 mymtx.sub_linecut(data[0].shape[0]//2,1)
 #mymtx.applystep('flip 1,0')
@@ -553,7 +553,7 @@ data[0].head()
 
 ```python
 mymtx = stlabutils.framearr_to_mtx(
-    data[len(data)//4:len(data)*3//4], 'Vmeas (V)', xkey='Iset (V)', ykey='RF power (dBm)')
+    data, 'Vmeas (V)', xkey='Iset (V)', ykey='RF power (dBm)')
 mymtx.rotate_ccw()
 mymtx.sub_linecut(data[0].shape[0]//2,1)
 #mymtx.applystep('flip 1,0')
@@ -651,7 +651,7 @@ data[0].head()
 
 ```python
 mymtx = stlabutils.framearr_to_mtx(
-    data[len(data)//4:len(data)*3//4], 'Vmeas (V)', xkey='Iset (V)', ykey='RF frequency (Hz)')
+    data, 'Vmeas (V)', xkey='Iset (V)', ykey='RF frequency (Hz)')
 mymtx.rotate_ccw()
 mymtx.sub_linecut(data[0].shape[0]//2,1)
 #mymtx.applystep('flip 1,0')
@@ -678,6 +678,71 @@ plt.imshow(mymtx.pmtx/1e-6, aspect='auto', cmap='vlag', extent=(
 cbar = plt.colorbar()
 cbar.set_label('Vmeas (µV)')
 plt.ylabel('Iset (µA)')
+plt.xlabel('RF frequency (GHz)')
+plt.tight_layout()
+#if plotall:
+    #filename = 'plots/'+devpath+'processing_fit_DC_rawdata.png'
+    #os.makedirs(os.path.dirname(filename), exist_ok=True)
+    #plt.savefig(filename,bbox_to_inches='tight')
+plt.show()
+plt.close()
+```
+
+```python
+vmtx = copy.deepcopy(mymtx)
+vmtx.vi_to_iv(vmin=np.nanmin(mymtx.pmtx.values),vmax=np.nanmax(mymtx.pmtx.values),nbins=300)
+vmtx.lowpass(0,1)
+```
+
+```python
+vv=vmtx.pmtx.values
+deltaI = abs(np.diff(mymtx.pmtx.index)[-1])
+dvdi = np.gradient(vv)
+dvdi
+```
+
+```python
+deltaI
+```
+
+```python
+dvdi[0].shape
+```
+
+```python
+extents = vmtx.getextents()
+
+plt.imshow(dvdi[0]/deltaI,aspect='auto', cmap='binary', extent=(
+    extents[0]/1e9, extents[1]/1e9, extents[3]/1e-6, extents[2]/1e-6),vmin=0,vmax=5)
+cbar = plt.colorbar()
+cbar.set_label('dI/dV (a.u.)')
+plt.ylabel('Vmeas (µV)')
+plt.xlabel('RF frequency (GHz)')
+plt.tight_layout()
+#if plotall:
+    #filename = 'plots/'+devpath+'processing_fit_DC_rawdata.png'
+    #os.makedirs(os.path.dirname(filename), exist_ok=True)
+    #plt.savefig(filename,bbox_to_inches='tight')
+plt.show()
+plt.close()
+```
+
+```python
+wbval = (0.1, 0.1)
+cmap = 'RdBu_r'
+lims = np.percentile(vmtx.pmtx.values/1e-6, (wbval[0], 100 - wbval[1]))
+vmin = lims[0]
+vmax = lims[1]
+extents = vmtx.getextents()
+
+# Plotting the raw data
+# Full overview
+plt.imshow(vmtx.pmtx/1e-6, aspect='auto', cmap='vlag', extent=(
+    extents[0]/1e9, extents[1]/1e9, extents[2]/1e-6, extents[3]/1e-6))#, vmin=vmin, vmax=vmax)
+#plt.ylim(-6,8)
+cbar = plt.colorbar()
+cbar.set_label('Iset (µA)')
+plt.ylabel('Vmeas (µV)')
 plt.xlabel('RF frequency (GHz)')
 plt.tight_layout()
 #if plotall:
@@ -726,22 +791,14 @@ plt.close()
 mymtx.pmtx.shape
 ```
 
-```python
-for i in np.arange(300,350,10):
-    lc=mymtx.pmtx.columns[i]
-    x,y = mymtx.pmtx.index/1e-6,mymtx.pmtx[lc]/1e-6
-    plt.plot(x,y,label=f'{lc/1e9} GHz',c='grey')
-plt.legend()
-plt.ylabel('Vmeas (µV)')
-plt.xlabel('Iset (µA)')
-for i in range(-3,4):
-    plt.axhline(i*16.7,c='k',ls='--')
-```
-
 ## extract step height
 
 
 ### single linecut
+
+```python
+import peakutils
+```
 
 ```python
 from scipy.signal import savgol_filter
@@ -749,35 +806,6 @@ from scipy.signal import savgol_filter
 
 ```python
 datapath
-```
-
-```python
-smooth_y = savgol_filter(y, 21, 3)
-new_x = np.linspace(min(x),max(x),1001)
-new_y = interp1d(x,smooth_y)(new_x)
-```
-
-```python
-plt.plot(x,y)
-plt.plot(new_x,new_y)
-```
-
-```python
-dVdI = np.log(abs(np.gradient(new_x,new_y)))
-```
-
-```python
-plt.plot(new_y,dVdI)
-```
-
-```python
-indexes = peakutils.indexes(dVdI,min_dist=100)#,thres=.1*max(dz))
-plt.plot(new_y,dVdI)
-plt.plot(new_y[indexes],dVdI[indexes],'o')
-```
-
-```python
-np.diff(new_y[indexes])
 ```
 
 ### for all frequencies
@@ -788,9 +816,7 @@ mymtx.pmtx.shape
 
 ```python
 freqs, peaks = [],[]
-```
 
-```python
 for i in range(mymtx.pmtx.shape[1]):
     lc=mymtx.pmtx.columns[i]
     x,y = mymtx.pmtx.index/1e-6,mymtx.pmtx[lc]/1e-6
@@ -799,21 +825,27 @@ for i in range(mymtx.pmtx.shape[1]):
     smooth_y = savgol_filter(y, 21, 3)
     new_x = np.linspace(min(x),max(x),1001)
     new_y = interp1d(x,smooth_y)(new_x)
-    
-    # test plot and dVdI
-    plt.plot(y,x)
-    plt.plot(new_y,new_x)
-    plt.show()
-    plt.close()
 
     # peak finding
     dVdI = np.log(abs(np.gradient(new_x,new_y)))
     indexes = peakutils.indexes(dVdI,min_dist=100)
+    peaks.append(new_y[indexes]) # in uV
+    
+    # test plot
+    fig=plt.figure()
+    gs=fig.add_gridspec(2,1,hspace=0)
+    ax1 = fig.add_subplot(gs[0,0])
+    plt.title(f'{i},{lc}')
+    plt.plot(y,x)
+    plt.plot(new_y,new_x)
+    ax1.set_xticklabels([])
+    ax2=fig.add_subplot(gs[1,0])
     plt.plot(new_y,dVdI)
     plt.plot(new_y[indexes],dVdI[indexes],'o')
+    [theax.set_xlim(-60,60) for theax in [ax1,ax2]]
     plt.show()
     plt.close()
-    peaks.append(np.diff(new_y[indexes])) # in uV
+    
 ```
 
 ```python
@@ -832,19 +864,43 @@ mydf = pd.DataFrame({'Frequency (Hz)':xdf,'Peakvoltage (uV)':ydf}).set_index('Fr
 ```
 
 ```python
-allfreqs = np.linspace(4e9,9e9,401)
+allfreqs = np.linspace(3e9,10e9,401)
 allvolts = Planck/(2*echarge)*allfreqs
 ```
 
 ```python
-plt.plot(mydf.index/1e9,mydf['Peakvoltage (uV)'],'o',label='data')
+plt.plot(mydf.index/1e9,mydf['Peakvoltage (uV)'],'.',c='grey',label='data')
 plt.plot(allfreqs/1e9,allvolts/1e-6,'k--',label='2ef/h')
-for i in range(2,7):
-    plt.plot(allfreqs/1e9,i*allvolts/1e-6,'k--')
+for i in range(-8,9):
+    plt.plot(allfreqs/1e9,i*allvolts/1e-6,'--',c='k')
     
+plt.ylim(-80,80)
 plt.xlabel('RF frequency (GHz)')
 plt.ylabel('Voltage step (µV)')
 plt.legend()
+```
+
+```python
+numlc = mymtx.pmtx.shape[1]
+numlc
+```
+
+```python
+#for k,i in enumerate(np.arange(0,numlc,50)):
+for k,i in enumerate(np.arange(0,numlc,100)):
+    lc=mymtx.pmtx.columns[i]
+    x,y = mymtx.pmtx.index/1e-6,mymtx.pmtx[lc].values/1e-6
+    #smooth_y = savgol_filter(y, 11, 1)
+    #new_x = np.linspace(min(x),max(x),1001)
+    #new_y = interp1d(x,smooth_y)(new_x)
+    plt.plot(x+k,y,label=f'{lc/1e9:.2f} GHz')
+plt.legend()
+plt.xlabel('Bias current (µA)')
+plt.ylabel('Vmeas (µV)')
+```
+
+```python
+
 ```
 
 ```python

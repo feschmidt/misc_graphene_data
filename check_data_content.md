@@ -65,3 +65,11 @@ myfiles = glob.glob(
     )
 [x.split('/')[-1] for x in myfiles]
 ```
+
+```python
+[x.split('/')[-1] for x in glob.glob('../steelelab/measurement_data/Triton/Mark/2017-03-02_Hero_Sample_Reborn/*')]
+```
+
+```python
+
+```
