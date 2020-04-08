@@ -126,10 +126,7 @@ plt.ylabel('Iset (uA)')
 plt.xlabel('Gate voltage (V)')
 plt.title('Full overview')
 plt.tight_layout()
-#if plotall:
-#    filename = 'plots/'+devpath+'processing_fit_DC_dVdI.png'
-#    os.makedirs(os.path.dirname(filename), exist_ok=True)
-#    plt.savefig(filename,bbox_to_inches='tight')
+plt.savefig('plots/processing_DC_dVdI_2D_Vg.png')
 plt.show()
 plt.close()
 ```
@@ -198,9 +195,7 @@ plt.errorbar(vgate,iswitch*rn/1e-6,di*rn/1e-6,fmt='.')
 plt.ylabel('IcRn product (µV)')
 plt.xlabel('Vgate (V)')
 plt.tight_layout()
-#filename = 'plots/'+devpath+'processing_fit_DC_fitdata.png'
-#os.makedirs(os.path.dirname(filename), exist_ok=True)
-#plt.savefig(filename,bbox_to_inches='tight')
+plt.savefig('plots/processing_DC_RnIc.png')
 plt.show()
 plt.close()
 ```
@@ -238,6 +233,7 @@ plt.xlabel('Vmeas (µV)')
 plt.ylabel('Iset (µA)')
 for i in range(1,5):
     plt.axvline(i*-16.7,c='k',ls='--')
+plt.savefig('plots/processing_DC_IsVm_Fiske_Vg.png')
 ```
 
 ```python
@@ -344,10 +340,7 @@ plt.ylabel('Iset (µA)')
 plt.xlabel('Bfield (µT)')
 #plt.title('Full overview')
 plt.tight_layout()
-#if plotall:
-#    filename = 'plots/'+devpath+'processing_fit_DC_dVdI.png'
-#    os.makedirs(os.path.dirname(filename), exist_ok=True)
-#    plt.savefig(filename,bbox_to_inches='tight')
+plt.savefig('plots/processing_DC_dVdI_2D_Bfield.png')
 plt.show()
 plt.close()
 ```
@@ -416,9 +409,7 @@ plt.errorbar(bset/1e-6,iswitch*rn/1e-6,di*rn/1e-6,fmt='.-')
 plt.ylabel('IcRn product (µV)')
 plt.xlabel('Bfield (µT)')
 plt.tight_layout()
-#filename = 'plots/'+devpath+'processing_fit_DC_fitdata.png'
-#os.makedirs(os.path.dirname(filename), exist_ok=True)
-#plt.savefig(filename,bbox_to_inches='tight')
+plt.savefig('plots/processing_DC_IcRn_Bfield.png')
 plt.show()
 plt.close()
 ```
@@ -499,9 +490,7 @@ plt.xlabel(r'Flux ($\Phi_0$)')
 #plt.title('Full overview')
 plt.tight_layout()
 #if plotall:
-#    filename = 'plots/'+devpath+'processing_fit_DC_dVdI.png'
-#    os.makedirs(os.path.dirname(filename), exist_ok=True)
-#    plt.savefig(filename,bbox_to_inches='tight')
+plt.savefig('plots/processing_DC_dVdI_Flux.png')
 plt.show()
 plt.close()
 ```
@@ -558,6 +547,7 @@ plt.xlabel('Vmeas (µV)')
 plt.ylabel('Iset (µA)')
 for i in range(1,5):
     plt.axvline(i*-16.7,c='k',ls='--')
+plt.savefig('plots/processing_DC_IsVm_Fiske_Bfield.png')
 ```
 
 ```python

@@ -98,7 +98,7 @@ plt.close()
 
 ```python
 dmtx = copy.deepcopy(mymtx)
-dmtx.lowpass(0,1.5)
+dmtx.lowpass(0.,1.)
 dmtx.yderiv(1)
 ```
 
@@ -118,10 +118,7 @@ cbar.set_label('dVdI (Ohm)')
 plt.ylabel('Iset (µA)')
 plt.xlabel('RF power (dBm)')
 plt.tight_layout()
-#if plotall:
-#    filename = 'plots/'+devpath+'processing_fit_DC_dVdI.png'
-#    os.makedirs(os.path.dirname(filename), exist_ok=True)
-#    plt.savefig(filename,bbox_to_inches='tight')
+plt.savefig('plots/processing_Shapiro_Hero_3GHz.png')
 plt.show()
 plt.close()
 ```
@@ -216,10 +213,7 @@ cbar.set_label('dVdI (Ohm)')
 plt.ylabel('Iset (µA)')
 plt.xlabel('RF power (dBm)')
 plt.tight_layout()
-#if plotall:
-#    filename = 'plots/'+devpath+'processing_fit_DC_dVdI.png'
-#    os.makedirs(os.path.dirname(filename), exist_ok=True)
-#    plt.savefig(filename,bbox_to_inches='tight')
+plt.savefig('plots/processing_Shapiro_Hero_5GHz.png')
 plt.show()
 plt.close()
 ```
@@ -318,10 +312,7 @@ cbar.set_label('dVdI (Ohm)')
 plt.ylabel('Iset (µA)')
 plt.xlabel('RF power (dBm)')
 plt.tight_layout()
-#if plotall:
-#    filename = 'plots/'+devpath+'processing_fit_DC_dVdI.png'
-#    os.makedirs(os.path.dirname(filename), exist_ok=True)
-#    plt.savefig(filename,bbox_to_inches='tight')
+plt.savefig('plots/processing_Shapiro_Hero_5GHz_2.png')
 plt.show()
 plt.close()
 ```
@@ -416,10 +407,7 @@ cbar.set_label('dVdI (Ohm)')
 plt.ylabel('Iset (µA)')
 plt.xlabel('RF power (dBm)')
 plt.tight_layout()
-#if plotall:
-#    filename = 'plots/'+devpath+'processing_fit_DC_dVdI.png'
-#    os.makedirs(os.path.dirname(filename), exist_ok=True)
-#    plt.savefig(filename,bbox_to_inches='tight')
+plt.savefig('plots/processing_Shapiro_Hero_8GHz.png')
 plt.show()
 plt.close()
 ```
@@ -514,10 +502,7 @@ cbar.set_label('dVdI (Ohm)')
 plt.ylabel('Iset (µA)')
 plt.xlabel('RF power (dBm)')
 plt.tight_layout()
-#if plotall:
-#    filename = 'plots/'+devpath+'processing_fit_DC_dVdI.png'
-#    os.makedirs(os.path.dirname(filename), exist_ok=True)
-#    plt.savefig(filename,bbox_to_inches='tight')
+plt.savefig('plots/processing_Shapiro_Hero_8GHz_2.png')
 plt.show()
 plt.close()
 ```
@@ -612,10 +597,7 @@ cbar.set_label('dVdI (Ohm)')
 plt.ylabel('Iset (µA)')
 plt.xlabel('RF power (dBm)')
 plt.tight_layout()
-#if plotall:
-#    filename = 'plots/'+devpath+'processing_fit_DC_dVdI.png'
-#    os.makedirs(os.path.dirname(filename), exist_ok=True)
-#    plt.savefig(filename,bbox_to_inches='tight')
+plt.savefig('plots/processing_Shapiro_Hero_10GHz.png')
 plt.show()
 plt.close()
 ```
@@ -719,10 +701,7 @@ cbar.set_label('dI/dV (a.u.)')
 plt.ylabel('Vmeas (µV)')
 plt.xlabel('RF frequency (GHz)')
 plt.tight_layout()
-#if plotall:
-    #filename = 'plots/'+devpath+'processing_fit_DC_rawdata.png'
-    #os.makedirs(os.path.dirname(filename), exist_ok=True)
-    #plt.savefig(filename,bbox_to_inches='tight')
+plt.savefig('plots/processing_Shapiro_Hero_freq_dIdV.png')
 plt.show()
 plt.close()
 ```
@@ -775,10 +754,7 @@ cbar.set_label('dVdI (Ohm)')
 plt.ylabel('Iset (µA)')
 plt.xlabel('RF frequency (GHz)')
 plt.tight_layout()
-#if plotall:
-#    filename = 'plots/'+devpath+'processing_fit_DC_dVdI.png'
-#    os.makedirs(os.path.dirname(filename), exist_ok=True)
-#    plt.savefig(filename,bbox_to_inches='tight')
+plt.savefig('plots/processing_Shapiro_Hero_freq_dVdI.png')
 plt.show()
 plt.close()
 ```
@@ -869,7 +845,7 @@ allvolts = Planck/(2*echarge)*allfreqs
 ```
 
 ```python
-plt.plot(mydf.index/1e9,mydf['Peakvoltage (uV)'],'.',c='grey',label='data')
+plt.plot(mydf.index/1e9,mydf['Peakvoltage (uV)'],'o',c='grey',label='data',alpha=0.5)
 plt.plot(allfreqs/1e9,allvolts/1e-6,'k--',label='2ef/h')
 for i in range(-8,9):
     plt.plot(allfreqs/1e9,i*allvolts/1e-6,'--',c='k')
@@ -878,6 +854,7 @@ plt.ylim(-80,80)
 plt.xlabel('RF frequency (GHz)')
 plt.ylabel('Voltage step (µV)')
 plt.legend()
+plt.savefig('plots/processing_Shapiro_Hero_freq_peaks.png')
 ```
 
 ```python
@@ -897,6 +874,7 @@ for k,i in enumerate(np.arange(0,numlc,100)):
 plt.legend()
 plt.xlabel('Bias current (µA)')
 plt.ylabel('Vmeas (µV)')
+plt.savefig('plots/processing_Shapiro_Hero_freq_linecuts.png')
 ```
 
 ```python

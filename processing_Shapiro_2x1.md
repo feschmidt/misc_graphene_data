@@ -249,10 +249,7 @@ plt.ylabel('Iset (µA)')
 plt.xlabel('RF power (dBm)')
 plt.tight_layout()
 plt.ylim(-10,10)
-#if plotall:
-#    filename = 'plots/'+devpath+'processing_fit_DC_dVdI.png'
-#    os.makedirs(os.path.dirname(filename), exist_ok=True)
-#    plt.savefig(filename,bbox_to_inches='tight')
+plt.savefig('plots/processing_Shapiro_2x1_onres.png')
 plt.show()
 plt.close()
 ```
@@ -351,10 +348,7 @@ cbar.set_label('dVdI (Ohm)')
 plt.ylabel('Iset (µA)')
 plt.xlabel('RF power (dBm)')
 plt.tight_layout()
-#if plotall:
-#    filename = 'plots/'+devpath+'processing_fit_DC_dVdI.png'
-#    os.makedirs(os.path.dirname(filename), exist_ok=True)
-#    plt.savefig(filename,bbox_to_inches='tight')
+plt.savefig('plots/processing_Shapiro_2x1_5GHz.png')
 plt.show()
 plt.close()
 ```
