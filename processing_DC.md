@@ -6,7 +6,7 @@ jupyter:
       extension: .md
       format_name: markdown
       format_version: '1.2'
-      jupytext_version: 1.4.1
+      jupytext_version: 1.4.2
   kernelspec:
     display_name: Python 3
     language: python
@@ -72,7 +72,8 @@ mymtx = stlabutils.framearr_to_mtx(
 mymtx.applystep('rotate_ccw')
 mymtx.applystep('flip 1,0')
 mymtx.applystep(f'crop 101,303,0,0')
-mymtx.outlier(100,0)
+mymtx.outlier(101,0)
+mymtx.outlier(61,1)
 mymtx.applystep(f'sub_linecut 100,1')
 ```
 
@@ -94,6 +95,69 @@ cbar.set_label('Vmeas (mV)')
 plt.ylabel('Iset (uA)')
 plt.xlabel('Gate voltage (V)')
 plt.title('Full overview')
+plt.tight_layout()
+#if plotall:
+    #filename = 'plots/'+devpath+'processing_fit_DC_rawdata.png'
+    #os.makedirs(os.path.dirname(filename), exist_ok=True)
+    #plt.savefig(filename,bbox_to_inches='tight')
+plt.show()
+plt.close()
+```
+
+```python
+flipmtx = copy.deepcopy(mymtx)
+flipmtx.vi_to_iv(vmin=np.nanmin(mymtx.pmtx.values),
+                 vmax=np.nanmax(mymtx.pmtx.values),
+                 nbins=1000)
+flipmtx.lowpass(0,1)
+```
+
+```python
+wbval = (0.1, 0.1)
+cmap = 'RdBu_r'
+lims = np.percentile(flipmtx.pmtx.values/1e-6, (wbval[0], 100 - wbval[1]))
+vmin = -2#lims[0]
+vmax = 2#lims[1]
+extents = flipmtx.getextents()
+
+# Plotting the raw data
+# Full overview
+plt.imshow(flipmtx.pmtx/1e-6, aspect='auto', cmap='vlag', extent=(
+    extents[0], extents[1], extents[2]/1e-6, extents[3]/1e-6), vmin=vmin, vmax=vmax)
+cbar = plt.colorbar()
+cbar.set_label('Iset (µA)')
+plt.ylabel('Vmeas (µV)')
+plt.xlabel('Gate voltage (V)')
+plt.title('Full overview')
+plt.tight_layout()
+#if plotall:
+    #filename = 'plots/'+devpath+'processing_fit_DC_rawdata.png'
+    #os.makedirs(os.path.dirname(filename), exist_ok=True)
+    #plt.savefig(filename,bbox_to_inches='tight')
+plt.show()
+plt.close()
+```
+
+```python
+#plt.plot(flipmtx.pmtx.index,np.gradient(flipmtx.pmtx[20]))
+plt.plot(flipmtx.pmtx.index,np.gradient(flipmtx.pmtx[30]))
+plt.ylim(-1e-8,4e-8)
+```
+
+```python
+deltaI = abs(np.diff(mymtx.pmtx.index)[-1])
+dvdi = np.gradient(flipmtx.pmtx.values)
+```
+
+```python
+extents = flipmtx.getextents()
+
+plt.imshow(dvdi[0]/deltaI,aspect='auto', cmap='binary', extent=(
+    extents[0]/1e9, extents[1]/1e9, extents[3]/1e-6, extents[2]/1e-6),vmin=0,vmax=4)
+cbar = plt.colorbar()
+cbar.set_label('dI/dV (Ohm)')
+plt.ylabel('Vmeas (µV)')
+plt.xlabel('Gate voltage (V)')
 plt.tight_layout()
 #if plotall:
     #filename = 'plots/'+devpath+'processing_fit_DC_rawdata.png'
@@ -220,7 +284,7 @@ mymtx.pmtx.shape
 
 ```python
 xnew, ynew = [],[]
-for i in range(121):
+for i in range(120):
     lc = mymtx.pmtx.columns[i]
     xx = mymtx.pmtx[lc]/1e-6
     yy = mymtx.pmtx.index/1e-6
@@ -239,6 +303,10 @@ plt.savefig('plots/processing_DC_IsVm_Fiske_Vg.png')
 ```python
 fres = 2*echarge*16.7e-6/Planck/1e9
 print(f'Resonance frequency at {fres:.6f} GHz')
+```
+
+```python
+pickle.dump([xnew,ynew],open('pkldump/IVsteps_Vg.pkl','wb'))
 ```
 
 # IV_vs_Bfield
@@ -346,7 +414,7 @@ plt.close()
 ```
 
 ```python
-#pickle.dump(dmtx.pmtx,open('pkldump/Hero_processing_2D_DC.pkl','wb'))
+pickle.dump(dmtx.pmtx,open('pkldump/processing_DC_Bfield.pkl','wb'))
 ```
 
 ```python
@@ -496,6 +564,10 @@ plt.close()
 ```
 
 ```python
+pickle.dump(dmtx.pmtx,open('pkldump/IVosc_Bfield.pkl','wb'))
+```
+
+```python
 # plot dVdI
 
 wbval = (0.1, 0.1)
@@ -551,10 +623,10 @@ plt.savefig('plots/processing_DC_IsVm_Fiske_Bfield.png')
 ```
 
 ```python
-fres = 2*echarge*16.7e-6/Planck/1e9
-print(f'Resonance frequency at {fres:.6f} GHz')
+pickle.dump([xnew,ynew],open('pkldump/IVsteps_Bfield.pkl','wb'))
 ```
 
 ```python
-
+fres = 2*echarge*16.7e-6/Planck/1e9
+print(f'Resonance frequency at {fres:.6f} GHz')
 ```

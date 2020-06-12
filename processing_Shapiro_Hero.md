@@ -6,7 +6,7 @@ jupyter:
       extension: .md
       format_name: markdown
       format_version: '1.2'
-      jupytext_version: 1.4.1
+      jupytext_version: 1.4.2
   kernelspec:
     display_name: Python 3
     language: python
@@ -124,7 +124,7 @@ plt.close()
 ```
 
 ```python
-#pickle.dump(dmtx.pmtx,open('pkldump/Hero_processing_2D_DC.pkl','wb'))
+pickle.dump(dmtx.pmtx,open('pkldump/processing_Shapiro_Hero_3GHz.pkl','wb'))
 ```
 
 # Shapiro 5GHz
@@ -318,7 +318,7 @@ plt.close()
 ```
 
 ```python
-#pickle.dump(dmtx.pmtx,open('pkldump/Hero_processing_2D_DC.pkl','wb'))
+pickle.dump(dmtx.pmtx,open('pkldump/processing_Shapiro_Hero_5GHz.pkl','wb'))
 ```
 
 # Shapiro 8GHz
@@ -508,7 +508,7 @@ plt.close()
 ```
 
 ```python
-#pickle.dump(dmtx.pmtx,open('pkldump/Hero_processing_2D_DC.pkl','wb'))
+pickle.dump(dmtx.pmtx,open('pkldump/processing_Shapiro_Hero_8GHz.pkl','wb'))
 ```
 
 # Shapiro 10GHz
@@ -858,11 +858,22 @@ plt.savefig('plots/processing_Shapiro_Hero_freq_peaks.png')
 ```
 
 ```python
+pickle.dump(
+    {
+        'RFfreq': mydf.index / 1e9,
+        'Vpeak': mydf['Peakvoltage (uV)'],
+        'xth': allfreqs / 1e9,
+        'yth': allvolts / 1e-6
+    }, open('pkldump/processing_Shapiro_Hero_freq.pkl', 'wb'))
+```
+
+```python
 numlc = mymtx.pmtx.shape[1]
 numlc
 ```
 
 ```python
+xnew, ynew,fnew=[],[],[]
 #for k,i in enumerate(np.arange(0,numlc,50)):
 for k,i in enumerate(np.arange(0,numlc,100)):
     lc=mymtx.pmtx.columns[i]
@@ -871,10 +882,29 @@ for k,i in enumerate(np.arange(0,numlc,100)):
     #new_x = np.linspace(min(x),max(x),1001)
     #new_y = interp1d(x,smooth_y)(new_x)
     plt.plot(x+k,y,label=f'{lc/1e9:.2f} GHz')
+    xnew.append(x+k)
+    ynew.append(y)
+    fnew.append(lc)
 plt.legend()
 plt.xlabel('Bias current (µA)')
 plt.ylabel('Vmeas (µV)')
 plt.savefig('plots/processing_Shapiro_Hero_freq_linecuts.png')
+```
+
+```python
+pickle.dump([xnew, ynew,fnew], open('pkldump/processing_Shapiro_Hero_lc.pkl', 'wb'))
+```
+
+```python
+
+```
+
+```python
+
+```
+
+```python
+
 ```
 
 ```python

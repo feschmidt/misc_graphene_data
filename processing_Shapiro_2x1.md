@@ -6,7 +6,7 @@ jupyter:
       extension: .md
       format_name: markdown
       format_version: '1.2'
-      jupytext_version: 1.4.1
+      jupytext_version: 1.4.2
   kernelspec:
     display_name: Python 3
     language: python
@@ -135,7 +135,7 @@ plt.close()
 ```
 
 ```python
-#pickle.dump(dmtx.pmtx,open('pkldump/Hero_processing_2D_DC.pkl','wb'))
+pickle.dump(dmtx.pmtx,open('pkldump/processing_Shapiro_2x1_8144.pkl','wb'))
 ```
 
 # Shapiro 8.198319GHz
@@ -255,7 +255,7 @@ plt.close()
 ```
 
 ```python
-#pickle.dump(dmtx.pmtx,open('pkldump/Hero_processing_2D_DC.pkl','wb'))
+pickle.dump(dmtx.pmtx,open('pkldump/processing_Shapiro_2x1_onres.pkl','wb'))
 ```
 
 ```python
@@ -354,7 +354,7 @@ plt.close()
 ```
 
 ```python
-#pickle.dump(dmtx.pmtx,open('pkldump/Hero_processing_2D_DC.pkl','wb'))
+pickle.dump(dmtx.pmtx,open('pkldump/processing_Shapiro_2x1_5GHz.pkl','wb'))
 ```
 
 ```python
